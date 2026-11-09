@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive coordinate visualizer for Cartesian, polar, cylindrical, and spherical coordinates.">
+  <title>Coordinate Visualizer | Engineering Physics-I</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-row">
+      <a class="wordmark" href="#top" aria-label="Coordinate Visualizer home">
+        <span class="wordmark-mark" aria-hidden="true">◎</span>
+        <span>FIELD NOTES <small>ENGINEERING PHYSICS-I</small></span>
+      </a>
+      <div class="header-tag">INTERACTIVE LAB <span>01 / 04</span></div>
+    </div>
+    <div class="hero" id="top">
+      <p class="eyebrow">ENGINEERING PHYSICS-I PROJECT</p>
+      <h1>Coordinate<br><em>Visualizer</em></h1>
+      <p class="hero-tagline">One point. Four ways to see it.</p>
+      <p class="hero-copy">Move between coordinate systems and watch a single point keep its place in space. Enter values or drag the point in the model.</p>
+    </div>
+    <nav class="system-nav" aria-label="Coordinate systems">
+      <a class="nav-item" href="#cartesian" data-tip="Three perpendicular distances locate the point along x, y, and z."><span>01</span> Cartesian <b>↗</b></a>
+      <a class="nav-item" href="#polar" data-tip="A radius and an angle locate a point in the xy-plane; z adds height for this 3D view."><span>02</span> Polar <b>↗</b></a>
+      <a class="nav-item" href="#cylindrical" data-tip="A radius and azimuth locate the point around the z-axis; z gives its height."><span>03</span> Cylindrical <b>↗</b></a>
+      <a class="nav-item" href="#spherical" data-tip="A distance from the origin, inclination from +z, and azimuth from +x locate the point."><span>04</span> Spherical <b>↗</b></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro-strip" aria-label="Project summary">
+      <p><span class="status-dot"></span> LIVE MODEL <span class="sep">/</span> ALL VALUES DESCRIBE THE SAME POINT</p>
+      <p class="convention-note">Spherical convention: <strong>r, θ from +z, φ from +x in the xy-plane</strong></p>
+    </section>
+
+    <section class="workspace" aria-label="Coordinate inputs and 3D model">
+      <div class="input-column">
+        <div class="column-heading">
+          <div><p class="eyebrow">EDIT THE POINT</p><h2>Coordinate inputs</h2></div>
+          <label class="unit-control" for="angle-unit">Angles
+            <select id="angle-unit" aria-label="Angle unit"><option value="deg">Degrees</option><option value="rad">Radians</option></select>
+          </label>
+        </div>
+
+        <div class="coordinate-grid">
+          <form class="coordinate-card" id="cartesian" data-system="cartesian" novalidate>
+            <div class="card-title"><span class="card-index">01</span><div><h3>Cartesian</h3><p>Perpendicular distances</p></div></div>
+            <div class="field-row"><label>x <input name="x" type="number" step="any" value="3" inputmode="decimal"></label><label>y <input name="y" type="number" step="any" value="4" inputmode="decimal"></label></div>
+            <label>z <input name="z" type="number" step="any" value="12" inputmode="decimal"></label>
+            <button type="submit">Apply Cartesian <span>↗</span></button>
+          </form>
+
+          <form class="coordinate-card" id="polar" data-system="polar" novalidate>
+            <div class="card-title"><span class="card-index">02</span><div><h3>Polar + height</h3><p>Radius, angle, and z</p></div></div>
+            <div class="field-row"><label>r <input name="r" type="number" min="0" step="any" value="5" inputmode="decimal"></label><label>θ <input name="theta" type="number" step="any" value="53.130" inputmode="decimal"></label></div>
+            <label>z <input name="z" type="number" step="any" value="12" inputmode="decimal"></label>
+            <button type="submit">Apply Polar <span>↗</span></button>
+          </form>
+
+          <form class="coordinate-card" id="cylindrical" data-system="cylindrical" novalidate>
+            <div class="card-title"><span class="card-index">03</span><div><h3>Cylindrical</h3><p>Radius around the z-axis</p></div></div>
+            <div class="field-row"><label>ρ <input name="rho" type="number" min="0" step="any" value="5" inputmode="decimal"></label><label>φ <input name="phi" type="number" step="any" value="53.130" inputmode="decimal"></label></div>
+            <label>z <input name="z" type="number" step="any" value="12" inputmode="decimal"></label>
+            <button type="submit">Apply Cylindrical <span>↗</span></button>
+          </form>
+
+          <form class="coordinate-card" id="spherical" data-system="spherical" novalidate>
+            <div class="card-title"><span class="card-index">04</span><div><h3>Spherical</h3><p>Radius, inclination, azimuth</p></div></div>
+            <div class="field-row"><label>r <input name="r" type="number" min="0" step="any" value="13" inputmode="decimal"></label><label>θ <input name="theta" type="number" min="0" max="180" step="any" value="22.620" inputmode="decimal"></label></div>
+            <label>φ <input name="phi" type="number" step="any" value="53.130" inputmode="decimal"></label>
+            <button type="submit">Apply Spherical <span>↗</span></button>
+          </form>
+        </div>
+        <div class="message" id="message" role="status" aria-live="polite">Ready. The point starts at (3, 4, 12).</div>
+        <aside class="formula-note">
+          <p class="eyebrow">ANGLE KEY</p>
+          <p><strong>Polar / cylindrical:</strong> angle in the xy-plane, measured counter-clockwise from +x.</p>
+          <p><strong>Spherical:</strong> θ is measured down from +z (0° to 180°); φ is the xy-plane azimuth from +x.</p>
+        </aside>
+      </div>
+
+      <section class="model-panel" aria-labelledby="model-title">
+        <div class="model-heading">
+          <div><p class="eyebrow">SPATIAL VIEW</p><h2 id="model-title">The same point in space</h2></div>
+          <button class="quiet-button" id="reset-view" type="button" aria-label="Reset 3D view">Reset view <span>⤢</span></button>
+        </div>
+        <div class="simulation-controls">
+          <p class="eyebrow">SIMULATION MODE <span>· SELECT A SYSTEM</span></p>
+          <div class="simulation-tabs" role="group" aria-label="Choose coordinate system to visualize">
+            <button type="button" data-mode="cartesian" aria-pressed="true"><span>01</span>Cartesian</button>
+            <button type="button" data-mode="polar" aria-pressed="false"><span>02</span>Polar</button>
+            <button type="button" data-mode="cylindrical" aria-pressed="false"><span>03</span>Cylindrical</button>
+            <button type="button" data-mode="spherical" aria-pressed="false"><span>04</span>Spherical</button>
+          </div>
+          <p class="mode-description" id="mode-description" aria-live="polite">Three perpendicular steps: x, then y, then z.</p>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="scene" tabindex="0" aria-label="Interactive 3D coordinate model with Cartesian, polar, cylindrical, and spherical views. Drag the point to change x and y. Shift-drag the point vertically to change z across the xy-plane, including into negative z. Drag the background to rotate the view. Use arrow keys to move it; hold Shift with up or down to change z."></canvas>
+          <div class="axis-key" aria-hidden="true"><span><i class="key-x"></i>x</span><span><i class="key-y"></i>y</span><span><i class="key-z"></i>z</span></div>
+          <div class="drag-hint"><span class="drag-icon">↔</span> Drag P to change x/y <span class="hint-divider">·</span> Shift-drag vertically to change z <span class="hint-divider">·</span> drag background to orbit</div>
+        </div>
+        <div class="model-readout">
+          <div><span>POINT P</span><strong id="point-readout">(3.000, 4.000, 12.000)</strong></div>
+          <div><span>XY PROJECTION</span><strong id="projection-readout">(3.000, 4.000, 0)</strong></div>
+          <div><span id="system-readout-label">CARTESIAN VALUES</span><strong id="system-readout">x=3, y=4, z=12</strong></div>
+        </div>
+        <div class="legend"><span><i class="legend-dot point-dot"></i>Point P</span><span><i class="legend-line dashed"></i>Projection to xy-plane</span><span><i id="construction-swatch" class="legend-line solid"></i><span id="construction-label">Cartesian coordinate steps</span></span><span><i class="legend-line origin-radius"></i>Origin to P</span></div>
+      </section>
+    </section>
+
+    <section class="explainer" aria-label="How to use the visualizer">
+      <div><p class="eyebrow">HOW TO EXPLORE</p><h2>Change a value.<br>Keep the point.</h2></div>
+      <ol><li><span>01</span> Choose an angle unit and enter a coordinate set.</li><li><span>02</span> Apply it to update every representation at once.</li><li><span>03</span> Drag P to change x and y, or orbit the model from its background.</li></ol>
+      <p class="edge-note">At the origin, angular direction is undefined. The visualizer uses zero as a display convention.</p>
+    </section>
+  </main>
+
+  <footer><span>ENGINEERING PHYSICS-I · COORDINATE VISUALIZER</span><span>MAIT <i>·</i> 2026</span></footer>
+</body>
+</html>
